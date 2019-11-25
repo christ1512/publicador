@@ -24,7 +24,7 @@ list = ( (req, res)=>{
 
 show = ( (req,res)=>{
     
-    let id = req.params.id
+    let id = req.user._id
     User.findById({ '_id':id }).exec( (err, objUser)=>{
         try{
             
@@ -45,7 +45,7 @@ show = ( (req,res)=>{
             return res.status(500).json({
                 status:message.error,
                 data:null
-            })    
+            })
         }
     });
 })
@@ -81,6 +81,41 @@ create = ( (req, res)=>{
     })
 })
 
+updateUser = ( ( req, res)=>{
+    let id = req.user._id
+    let body = req.body
+    let dataUpdate = {
+        direccion:body.direccion,
+        telefono:body.telefono,
+        dpi:body.dpi,
+        estado:body.estado
+    }
+    objUser = User.findByIdAndUpdate( id, dataUpdate, {new:true}).exec()
+    objUser.then( objUser =>{
+        
+            
+        if( !objUser ){
+            return res.status(200).json({
+                status:message.no_register,
+                data:null
+            })    
+        }
+
+        return res.status(200).json({
+            status:message.success,
+            data:objUser
+        })
+
+        
+    }).catch( ( err ) => {
+        console.log("ERROR: update usuarios: "+err )
+        return res.status(500).json({
+            status:message.error,
+            data:null
+        })
+    })
+})
+
 module.exports = {
-    list, show, create
+    list, show, create, updateUser
 }

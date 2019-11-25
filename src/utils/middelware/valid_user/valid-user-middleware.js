@@ -7,7 +7,7 @@ let verificaAuth = ( (req, res, next)=>{
     jwt.verify( token, 'publicador-v-1',( err, decoded)=>{
         if( err ){
             return res.status(401).json({
-                status:message.error,
+                status:message.no_token,
                 data:err
             })
         }
