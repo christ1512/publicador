@@ -1,9 +1,4 @@
-/*module.exports={
-    loginUser:async(req,res)=>{
-        res.status(200).json({message:'login iniciado'})
-    }
-}*/
-const message = require('../resp/messajes')
+const message = require('../utils/resp/messajes')
 const User = require('../models/Users')
 const bcrypt = require('bcryptjs');
 
@@ -28,6 +23,7 @@ list = ( (req, res)=>{
 })
 
 show = ( (req,res)=>{
+    
     let id = req.params.id
     User.findById({ '_id':id }).exec( (err, objUser)=>{
         try{

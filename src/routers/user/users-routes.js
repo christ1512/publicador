@@ -2,16 +2,11 @@ const {Router} = require('express')
 const router =Router()
 
 const routerCtrl = require('../../controllers/user-controller')
+const verify = require('../../utils/middelware/valid_user/valid-user-middleware')
+const { userRequestRules, validate } = require('../../utils/request/create-user-request')
 
-/*const {
-loginUser
-}=require('../controllers/user-controller')
-
-
-router.route('/login')
-.get(loginUser)*/
-router.get( '/users', routerCtrl.list )
-router.get( '/users/:id', routerCtrl.show )
-router.post('/users', routerCtrl.create )
+router.get( '/users/list', routerCtrl.list )
+router.get( '/users/', verify, routerCtrl.show )
+router.post('/users', userRequestRules(), validate, routerCtrl.create )
 
 module.exports=router
