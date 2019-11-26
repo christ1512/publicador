@@ -3,56 +3,55 @@ const User = require('../models/Users')
 const bcrypt = require('bcryptjs');
 
 
-list = ( (req, res)=>{
-    let lstUser = User.find().exec();
-    
-    lstUser.then( (users) =>{
-    
+list = ( async (req, res) => {
+
+    try {
+        let lstUser = await User.find();
         return res.status(200).json({
             status:message.success,
-            data:users
+            data:lstUser
         })
-        
-    }).catch( e => {
+    } catch ( err ) {
         console.log("ERROR: lista de usuarios: "+e )
         return res.status(500).json({
             statusCode:message.error,
             data:null
         })
-    })
+    }
+
 })
 
-show = ( (req,res)=>{
+show = ( async ( req, res ) => {
     
-    let id = req.user._id
-    User.findById({ '_id':id }).exec( (err, objUser)=>{
-        try{
-            
-            if( !objUser ){
-                return res.status(200).json({
-                    status:message.no_register,
-                    data:null
-                })    
-            }
-    
+    try {
+        let id = req.user._id
+        let objUser = await User.findById({'_id':id})
+        
+        if( !objUser ){
             return res.status(200).json({
-                status:message.success,
-                data:objUser
-            })
-
-        }catch( e ){
-            console.log("ERROR: show de usuarios: "+err )
-            return res.status(500).json({
-                status:message.error,
+                status:message.no_register,
                 data:null
-            })
+            })    
         }
-    });
+
+        return res.status(200).json({
+            status:message.success,
+            data:objUser
+        })
+
+    } catch ( err ) {
+        console.log("ERROR: show de usuarios: "+err )
+        return res.status(500).json({
+            status:message.error,
+            data:null
+        })
+        
+    }
 })
 
-create = ( (req, res)=>{
+create = ( async (req, res)=>{
     let body = req.body
-    let objUser = new User({
+    let objUser = await new User({
         nombre:body.nombre,
         password:bcrypt.hashSync(body.password),
         //password:body.password,
@@ -81,7 +80,7 @@ create = ( (req, res)=>{
     })
 })
 
-updateUser = ( ( req, res)=>{
+updateUser = ( async( req, res)=>{
     let id = req.user._id
     let body = req.body
     let dataUpdate = {
@@ -90,10 +89,8 @@ updateUser = ( ( req, res)=>{
         dpi:body.dpi,
         estado:body.estado
     }
-    objUser = User.findByIdAndUpdate( id, dataUpdate, {new:true}).exec()
-    objUser.then( objUser =>{
-        
-            
+    try {
+        objUser = await User.findByIdAndUpdate( id, dataUpdate, {new:true})
         if( !objUser ){
             return res.status(200).json({
                 status:message.no_register,
@@ -106,14 +103,14 @@ updateUser = ( ( req, res)=>{
             data:objUser
         })
 
-        
-    }).catch( ( err ) => {
+    } catch ( err ) {
         console.log("ERROR: update usuarios: "+err )
         return res.status(500).json({
             status:message.error,
             data:null
         })
-    })
+    }
+    
 })
 
 module.exports = {

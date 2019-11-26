@@ -11,6 +11,7 @@ app.use(morgan('dev'))
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
 
+process.env.SEED = process.env.SEED || 'publicador-v-1';
 //routes
 app.use( require('./routers/index') );
 

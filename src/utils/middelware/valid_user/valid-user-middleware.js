@@ -4,7 +4,7 @@ const message = require('../../resp/messajes')
 let verificaAuth = ( (req, res, next)=>{
     let token = req.get('Authorization')
 
-    jwt.verify( token, 'publicador-v-1',( err, decoded)=>{
+    jwt.verify( token, process.env.SEED,( err, decoded)=>{
         if( err ){
             return res.status(401).json({
                 status:message.no_token,
