@@ -20,11 +20,9 @@ let userRequestRules = ( () => {
             .isNumeric().withMessage('El DPI es invalido'),
 
         check('email').notEmpty().withMessage('El email es requerido')
-            .isEmail().withMessage('El email es invalido'),
+            .isEmail().withMessage('El email es invalido')
             
-        check('estado').isNumeric().withMessage('El estado es invalido'),
-
-        check('fecha').isISO8601().toDate()
+       
     ]
 })
 

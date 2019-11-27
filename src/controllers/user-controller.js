@@ -1,5 +1,6 @@
 const message = require('../utils/resp/messajes')
 const User = require('../models/Users')
+const Token = require('../models/Tokens')
 const bcrypt = require('bcryptjs');
 
 
@@ -65,12 +66,21 @@ create = ( (req, res)=>{
         fecha:body.fecha,
     }).save()
 
+    
+
     objUser.then( user =>{
-        
-        res.status( 201 ).json({
-            status:message.create,
-            data:user
-        })
+        const newRegisterToken = new Token({user:user._id})
+        console.log(user._id)
+        newRegisterToken.save()//asignamos el id del usuario recien creado al modelo Token los demas campos se dejan vacios para despues.
+
+        if(newRegisterToken){
+            res.status( 201 ).json({
+                status:message.create,
+                data:user
+            })
+        }else{
+            res.status(403).json({status:'No se pudo registra al nuevo usuario',data:null})
+        }
 
     }).catch( err =>{
         console.log("ERROR: create de usuarios: "+err )

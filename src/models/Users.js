@@ -39,10 +39,6 @@ const UserSchema =new Schema({
     fecha:{
         type:Date,
         default:Date.now
-    },
-    token:{
-        type:String,
-        required:false
     }
 }) 
 UserSchema.methods.encryptPassword=async(password)=>{
